@@ -1,0 +1,33 @@
+{
+  "name": "limiter",
+  "version": "0.0.1",
+  "description": "input counter and limite",
+  "keywords": [],
+  "homepage": "https://github.com/Administrator/limiter",
+  "author": "airyland",
+  "maintainers": [
+    "airyland"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Administrator/limiter.git"
+  },
+  "bugs": {
+    "url": "git://github.com/Administrator/limiter.git/issues"
+  },
+  "licenses": "MIT",
+  "spm": {
+    "main": "index.js",
+    "dependencies": {
+      "jquery": "1.8.3",
+      "eventor": "0.0.1"
+    },
+    "devDependencies": {
+      "expect.js": "0.3.1"
+    },
+    "engines": {
+      "seajs": "2.2.1"
+    },
+    "tests": "tests/*.js"
+  }
+}
