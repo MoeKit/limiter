@@ -12,17 +12,17 @@ var defaults = {
 };
 
 var triggerEvents = 'keyup.mk-limiter blur.mk-limiter';
-var limiter = function(o) {
+var limiter = function (o) {
     var _this = this;
     this.init(o);
-    this.on('change', function(length, remain, val) {
+    this.on('change', function (length, remain, val) {
         _this.$rsBox.html(_this._compileTpl(length, remain, 'rsNormalTpl'));
     });
-    this.on('overflow', function(length, remain, val) {
+    this.on('overflow', function (length, remain, val) {
         _this.$rsBox.html(_this._compileTpl(length, remain, 'rsOverflowTpl'));
         // whether to cut text
         if (_this.o.isCut) {
-            val = val.slice(o, _this.o.max);
+            val = val.slice(o, _this.o.mode === 'en2half' ? _this.o.max * 2 : _this.o.max);
             _this.$target.val(val).trigger('keyup.mk-limiter');
         }
     });
@@ -33,20 +33,20 @@ var limiter = function(o) {
 Events.mixTo(limiter);
 
 var counterMode = {
-    'default': function(val) {
+    'default': function (val) {
         return val.length;
     },
-    'en2half': function(val) {
+    'en2half': function (val) {
         val = val.replace(/[^\x00-\xff]/g, "**");
         return Math.ceil(val.length / 2);
     }
 };
 
-limiter.prototype._compileTpl = function(length, remain, tpl) {
+limiter.prototype._compileTpl = function (length, remain, tpl) {
     return this.o[tpl].replace(/{{length}}/g, length).replace(/{{remain}}/g, remain);
 };
 
-limiter.prototype.init = function(o) {
+limiter.prototype.init = function (o) {
     this.o = $.extend(defaults, o);
     var _this = this;
     // get mode
@@ -65,7 +65,7 @@ limiter.prototype.init = function(o) {
     this.$target = $(this.o.target);
     this.$rsBox = $(this.o.rsBox);
 
-    this.$target.on(triggerEvents, function() {
+    this.$target.on(triggerEvents, function () {
         var val = $(this).val();
         var len = _this.getLength(val);
 
@@ -77,21 +77,21 @@ limiter.prototype.init = function(o) {
     });
 
     // has to use setTimeout
-    setTimeout(function() {
+    setTimeout(function () {
         _this.$target.trigger('keyup.mk-limiter');
     }, 0);
 
 
 };
 
-limiter.prototype.getLength = function(val) {
+limiter.prototype.getLength = function (val) {
     if (this.o.isIgnoreHTML) {
         val = val.replace(/<[^>]*>/g, "")
     }
     return this.counter(val);
 };
 
-limiter.prototype.destroy = function() {
+limiter.prototype.destroy = function () {
     this.$target.off(triggerEvents);
     this.$rsBox.empty();
 };
